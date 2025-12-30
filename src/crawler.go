@@ -15,20 +15,13 @@ type Crawler struct {
 	dir     string
 }
 
-func Init_Crawler(md_name string, dir string) Crawler {
-	return Crawler{
-		md_name: md_name,
-		dir:     dir,
-	}
-}
-
-func (c Crawler) GetMarkdownData() ([]string, error) {
+func (c *Crawler) GetMarkdownData() ([]string, error) {
 	var paths []string
 
 	// Get list of entries
 	err := filepath.WalkDir(c.dir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			log.Fatalln("Failed to get paths: ", err)
+			log.Println("Failed to get paths: ", err)
 			return err
 		}
 
@@ -49,7 +42,7 @@ func (c Crawler) GetMarkdownData() ([]string, error) {
 	})
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
 	fmt.Println(paths)

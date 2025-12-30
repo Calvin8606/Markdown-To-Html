@@ -1,30 +1,35 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"os"
 )
 
-type StaticEngine struct {
-	crawler Crawler
+type Project struct {
+	Name        string `yaml:"name"`
+	Date        string `yaml:"date"`
+	Description string `yaml:"description"`
+
+	// Content (The HTML body)
+	Content template.HTML
 }
 
-func (s StaticEngine) Run() {
-	paths, err := s.crawler.GetMarkdownData()
-	if err != nil {
-		log.Println("Error getting paths! ", err)
-	}
-	Parse(paths)
-	// s.generator.Generate()
-}
-
-func main() {
+func GenerateStaticWebpage() {
 	if len(os.Args) < 3 {
 		log.Println("Invalid Args! Use: [Markdown File Name] [Directory Path]")
 	}
-	crawler := Init_Crawler(os.Args[1], os.Args[2])
-	generate_html := StaticEngine{
-		crawler: crawler,
+	crawler := Crawler{
+		md_name: os.Args[1],
+		dir:     os.Args[2]}
+	paths, err := crawler.GetMarkdownData()
+	if err != nil {
+		log.Println("Error getting paths! ", err)
 	}
-	generate_html.Run()
+	generatedHtml := Parse(paths)
+	GenerateHtml(generatedHtml)
+}
+
+func main() {
+	GenerateStaticWebpage()
 }

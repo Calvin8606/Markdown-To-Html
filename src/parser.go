@@ -3,7 +3,7 @@ package main
 
 import (
 	"bytes"
-	"fmt"
+	"html/template"
 	"log"
 	"os"
 
@@ -14,38 +14,7 @@ import (
 	"github.com/yuin/goldmark/renderer/html"
 )
 
-type PreMetaData struct {
-	name string   `yaml:"name"`
-	tags []string `yaml:"tags"`
-}
-
-func parseMetadata(paths []string) ([][]byte, error) {
-	var matter PreMetaData
-	var projectList [][]byte
-
-	for _, path := range paths {
-		fileData, err := os.ReadFile(path)
-		if err != nil {
-			log.Println("Failed to read file contents: ", err)
-			return nil, err
-		}
-
-		rest, err := frontmatter.Parse(bytes.NewReader(fileData), &matter)
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-
-		projectList = append(projectList, rest)
-
-	}
-
-	return projectList, nil
-}
-
-func renderMarkdown(markdownProjectList [][]byte) []string {
-	var buf bytes.Buffer
-	projectList := make([]string, 0, len(markdownProjectList))
+func Parse(paths []string) ([]Project, error) {
 	// Create markdown configs
 	markdown := goldmark.New(
 		goldmark.WithExtensions(extension.GFM),
@@ -57,23 +26,31 @@ func renderMarkdown(markdownProjectList [][]byte) []string {
 			html.WithXHTML(),
 		),
 	)
-	// Loop through project markdown list
-	for i := range markdownProjectList {
-		buf.Reset()
-		if err := markdown.Convert([]byte(markdownProjectList[i]), &buf); err != nil {
+
+	var projects []Project
+	var p Project
+	// Get each path and store each metadata
+	for _, path := range paths {
+		fileData, err := os.ReadFile(path)
+		if err != nil {
+			log.Println("Failed to read file contents: ", err)
+			return nil, err
+		}
+
+		rest, err := frontmatter.Parse(bytes.NewReader(fileData), &p)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+
+		var buf bytes.Buffer
+		if err := markdown.Convert(rest, &buf); err != nil {
 			log.Println("Failed to convert to html", err)
 			panic(err)
 		}
-		projectList = append(projectList, buf.String())
-	}
-	fmt.Println(projectList)
-	return projectList
-}
 
-func Parse(paths []string) []string {
-	markdownProjectList, err := parseMetadata(paths)
-	if err != nil {
-		log.Println("Cannot parse metadata from markdown file: ", err)
+		p.Content = template.HTML(buf.String())
+		projects = append(projects, p)
 	}
-	return renderMarkdown(markdownProjectList)
+	return projects, nil
 }
