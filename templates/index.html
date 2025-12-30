@@ -13,19 +13,23 @@
     }
   </style>
   <div class="intro">
-    <p>Hi! My name is Calvin.</p>
-  </div>
-  <div>
-    <h1>Welcome! I hope you like what you see! :D</h1>
+    <div>
+      <h1>Welcome! I hope you like what you see! :D</h1>
+    </div>
+    <div>
+      <p>Hi! My name is Calvin.</p>
+    </div>
   </div>
   <div class="project-list">
     {{ range . }}
-    <div class="project-card bgblue">
-      <h2>
-        <a href="pages/{{ .Name}}.html">{{ .Name}}</a>
-        <span>{{ .Date }}</span>
+    <div class="project-card">
+      <h2 class="name-date">
+        <a class="link left-item" href="pages/{{ .Name}}.html">{{ .Name}}</a>
+        <span class="right-item">{{ .Date }}</span>
       </h2>
-      <p>{{ .Description }}</p>
+      <div class="description">
+        <p>{{ .Description }}</p>
+      </div>
     </div>
     {{ end }}
   </div>
