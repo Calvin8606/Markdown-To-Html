@@ -2,7 +2,6 @@
 package main
 
 import (
-	"fmt"
 	"io/fs"
 	"log"
 	"path/filepath"
@@ -44,7 +43,5 @@ func (c *Crawler) GetMarkdownData() ([]string, error) {
 	if err != nil {
 		log.Println(err)
 	}
-
-	fmt.Println(paths)
 	return paths, err
 }

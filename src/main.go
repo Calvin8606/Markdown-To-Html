@@ -7,29 +7,36 @@ import (
 )
 
 type Project struct {
-	Name        string `yaml:"name"`
-	Date        string `yaml:"date"`
-	Description string `yaml:"description"`
+	Name        string `yaml:"Name"`
+	Date        string `yaml:"Date"`
+	Author      string `yaml:"Author"`
+	Description string `yaml:"Description"`
 
-	// Content (The HTML body)
 	Content template.HTML
 }
 
-func GenerateStaticWebpage() {
+func main() {
 	if len(os.Args) < 3 {
 		log.Println("Invalid Args! Use: [Markdown File Name] [Directory Path]")
 	}
+
 	crawler := Crawler{
 		md_name: os.Args[1],
-		dir:     os.Args[2]}
+		dir:     os.Args[2],
+	}
 	paths, err := crawler.GetMarkdownData()
 	if err != nil {
 		log.Println("Error getting paths! ", err)
 	}
-	generatedHtml := Parse(paths)
-	GenerateHtml(generatedHtml)
-}
 
-func main() {
-	GenerateStaticWebpage()
+	generatedHtml, err := Parse(paths)
+	if err != nil {
+		log.Println("Failed to generate html: ", err)
+	}
+
+	generator := Generator{
+		OutputDir:    os.Args[3],
+		TemplatePath: "/home/calvin/Projects/MarkdownToHtmlGenerator/templates/project-description-layout.html",
+	}
+	generator.GenerateHtml(generatedHtml)
 }

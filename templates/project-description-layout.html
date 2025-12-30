@@ -2,10 +2,25 @@
 <html lang="en">
 
 <head>
-  <title>{{.Name}}</title>
+  <meta charset="UTF-8">
+  <title>{{ .Name }} | Portfolio</title>
 </head>
 
 <body>
+  <header>
+    <h1>{{ .Name }}</h1>
+    <div class="meta">
+      <span>By {{ .Author }}</span> |
+      <time>{{ .Date }}</time>
+    </div>
+    <p class="summary"><em>{{ .Description }}</em></p>
+  </header>
+
+  <hr>
+
+  <main>
+    {{ .Content }}
+  </main>
 </body>
 
 </html>

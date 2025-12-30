@@ -28,7 +28,7 @@ func Parse(paths []string) ([]Project, error) {
 	)
 
 	var projects []Project
-	var p Project
+	var project Project
 	// Get each path and store each metadata
 	for _, path := range paths {
 		fileData, err := os.ReadFile(path)
@@ -37,20 +37,25 @@ func Parse(paths []string) ([]Project, error) {
 			return nil, err
 		}
 
-		rest, err := frontmatter.Parse(bytes.NewReader(fileData), &p)
+		// Get the mardown content
+		rest, err := frontmatter.Parse(bytes.NewReader(fileData), &project)
 		if err != nil {
 			log.Println(err)
 			return nil, err
 		}
 
+		// Convert Rest (markdown) to HTML
 		var buf bytes.Buffer
 		if err := markdown.Convert(rest, &buf); err != nil {
 			log.Println("Failed to convert to html", err)
 			panic(err)
 		}
 
-		p.Content = template.HTML(buf.String())
-		projects = append(projects, p)
+		// Top part for meta data and structure
+		projects = append(projects, project)
+
+		// Contents of Markdown to HTML
+		project.Content = template.HTML(buf.String())
 	}
 	return projects, nil
 }
