@@ -1,5 +1,5 @@
 ---
-Name: Markdown-To-Html
+Name: Markdown To Html
 Date: 12/29/25
 Author: Calvin Chau
 Description: This is a Markdown to HTML Static Site Generator

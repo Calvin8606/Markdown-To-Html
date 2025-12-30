@@ -8,6 +8,7 @@ import (
 
 type Project struct {
 	Name        string `yaml:"Name"`
+	Path        string `yaml:"Path"`
 	Date        string `yaml:"Date"`
 	Author      string `yaml:"Author"`
 	Description string `yaml:"Description"`

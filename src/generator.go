@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type Generator struct {
@@ -20,7 +21,8 @@ func (g *Generator) GenerateHtml(generatedHtml []Project) {
 	// Execute template and write to a diff file
 	for _, html := range generatedHtml {
 		// Create a file at certain OutputDir path
-		fileName := html.Name + ".html"
+		dashFileName := strings.ReplaceAll(html.Name, " ", "-")
+		fileName := dashFileName + ".html"
 		filePath := filepath.Join(g.OutputDir, fileName)
 		projectFile, err := os.Create(filePath)
 		if err != nil {

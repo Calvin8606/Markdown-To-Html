@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/adrg/frontmatter"
 	"github.com/yuin/goldmark"
@@ -50,6 +51,8 @@ func Parse(paths []string) ([]Project, error) {
 			log.Println("Failed to convert to html", err)
 			panic(err)
 		}
+
+		project.Path = strings.ReplaceAll(project.Name, " ", "-")
 
 		// Top part for meta data and structure
 		projects = append(projects, project)
