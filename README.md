@@ -12,10 +12,10 @@ Description: This is a Markdown to HTML Static Site Generator
 
 ## Design
 * Crawler
-** I needed a crawler to go though my project directory and collect Readme files
+ I needed a crawler to go though my project directory and collect Readme files
 * Parser
-** The parse was made to parse markdown information using libraries like Frontmatter, Goldmark, and HTML/template.
+ The parse was made to parse markdown information using libraries like Frontmatter, Goldmark, and HTML/template.
 * Generator
-** The generator produces the HTML file detailing my projects and their descriptions. It also focuses more on the templating aspect.
+ The generator produces the HTML file detailing my projects and their descriptions. It also focuses more on the templating aspect.
 
 
